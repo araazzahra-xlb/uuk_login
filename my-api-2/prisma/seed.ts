@@ -16,71 +16,63 @@ async function main() {
   const customerPassword = await bcrypt.hash("Customer123!", 10);
 
   await prisma.user.upsert({
-    where: { email: "admin@pln.test" },
+    where: { email: "admin@isp.test" },
     update: {},
     create: {
       name: "Administrator",
-      email: "admin@pln.test",
+      email: "admin@isp.test",
       password: adminPassword,
       role: Role.ADMIN,
     },
   });
 
   await prisma.user.upsert({
-    where: { email: "customer@pln.test" },
+    where: { email: "customer@isp.test" },
     update: {},
     create: {
       name: "Pelanggan Demo",
-      email: "customer@pln.test",
+      email: "customer@isp.test",
       password: customerPassword,
       role: Role.CUSTOMER,
     },
   });
 
-  await prisma.electricityService.upsert({
-    where: { code: "R1-900" },
-    update: {},
-    create: {
-      code: "R1-900",
-      name: "Rumah Tangga 900 VA",
-      power_va: 900,
-      price_per_kwh: 1352,
-      is_active: true,
-    },
-  });
-
-  await prisma.electricityService.upsert({
-    where: { code: "R1-1300" },
-    update: {},
-    create: {
-      code: "R1-1300",
-      name: "Rumah Tangga 1300 VA",
-      power_va: 1300,
-      price_per_kwh: 1444.7,
-      is_active: true,
-    },
-  });
-
-  await prisma.electricityService.upsert({
-    where: { code: "B1-2200" },
-    update: { is_active: false },
-    create: {
-      code: "B1-2200",
-      name: "Bisnis 2200 VA (nonaktif)",
-      power_va: 2200,
-      price_per_kwh: 1669.53,
-      is_active: false,
-    },
-  });
+  if ((await prisma.serviceProvider.count()) === 0) {
+    await prisma.serviceProvider.createMany({
+      data: [
+        {
+          name: "Paket Rumah 20 Mbps",
+          description: "Untuk 1-3 perangkat",
+          speed: 20,
+          price_per_month: 250000,
+          is_active: true,
+        },
+        {
+          name: "Paket Rumah 50 Mbps",
+          description: "Untuk keluarga kecil",
+          speed: 50,
+          price_per_month: 350000,
+          is_active: true,
+        },
+        {
+          name: "Paket Bisnis 100 Mbps (nonaktif)",
+          description: "Untuk uji status nonaktif",
+          speed: 100,
+          price_per_month: 600000,
+          is_active: false,
+        },
+      ],
+    });
+  }
 
   console.log("Seed selesai");
-  console.log("Admin: admin@pln.test / Admin123!");
-  console.log("Customer: customer@pln.test / Customer123!");
+  console.log("Admin: admin@isp.test / Admin123!");
+  console.log("Customer: customer@isp.test / Customer123!");
 }
 
 main()
   .catch((error) => {
-    console.error("Seed gagal:", error);
+    console.error(error);
     process.exit(1);
   })
   .finally(async () => {

@@ -11,10 +11,9 @@ import { FileStorageModule } from './file-storage/file-storage.module.js';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { UsersModule } from './users/users.module.js';
-import { ElectricityServicesModule } from './electricity-services/electricity-services.module.js';
-import { ElectricityAccountsModule } from './electricity-accounts/electricity-accounts.module.js';
-import { BillingsModule } from './billings/billings.module.js';
-import { PaymentsModule } from './payments/payments.module.js';
+import { ServiceProvidersModule } from './service-providers/service-providers.module.js';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module.js';
+
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -26,10 +25,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     FileStorageModule,
     AuthModule,
     UsersModule,
-    ElectricityServicesModule,
-    ElectricityAccountsModule,
-    BillingsModule,
-    PaymentsModule,
+    ServiceProvidersModule,
+    SubscriptionsModule,
     ObserveModule.forRoot({
       appKey: process.env.OBSERVE_APP_KEY ?? 'YOUR_APP_KEY',
       appSecret: process.env.OBSERVE_APP_SECRET ?? 'YOUR_APP_SECRET',
